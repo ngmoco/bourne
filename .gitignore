@@ -5,3 +5,4 @@ pkg
 tags
 rdoc
 *.gem
+.bundle
