@@ -307,8 +307,7 @@ class MockTest < Test::Unit::TestCase
   class FakeExpectation
     attr_reader :args
 
-    def invoke(args)
-      @args = args
+    def invoke
     end
 
     def match?(*args)
@@ -327,7 +326,6 @@ class MockTest < Test::Unit::TestCase
     expectation = FakeExpectation.new
     mock.expectations.add expectation
     mock.send(method, *args)
-    assert_equal args, expectation.args
   end
 
   private
