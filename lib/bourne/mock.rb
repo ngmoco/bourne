@@ -16,20 +16,13 @@ module Mocha # :nodoc:
       if matching_expectation_allowing_invocation = @expectations.match_allowing_invocation(symbol, *arguments)
         matching_expectation_allowing_invocation.invoke(arguments, &block)
       else
-        if (matching_expectation = @expectations.match(symbol, *arguments)) || (!matching_expectation && !@everything_stubbed)
-          matching_expectation.invoke(arguments, &block) if matching_expectation
-          message = UnexpectedInvocation.new(self, symbol, *arguments).to_s
-          message << @mockery.mocha_inspect
-          raise ExpectationErrorFactory.build(message, caller)
+        target = if self.respond_to? :mocha
+          self.mocha
         else
-          target = if self.respond_to? :mocha
-            self.mocha
-          else
-            mocha
-          end
-          Mockery.instance.invocation(target, symbol, arguments)
-          nil
+          mocha
         end
+        Mockery.instance.invocation(target, symbol, arguments)
+        nil
       end
     end
   end
